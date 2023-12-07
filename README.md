@@ -1,1 +1,1 @@
-# recipe-app-api
+Django REST Api for Recipes
