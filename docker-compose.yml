@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    ports:
+      - "5433:5433"
+    environment:
+      - PGHOST=host.docker.internal
+      - PGPORT=5433
+      - PGUSER=postgres
+      - POSTGRES_DB=recipes_db
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data 
+    networks:
+      - recipeapp_services
+    
+  web:
+    container_name: recipeapp
+    build: .
+    command: bash -c """python3 manage.py runserver 0.0.0.0:8000"""
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    networks:
+      - recipeapp_services
+    
+networks:
+  recipeapp_services:
