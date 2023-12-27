@@ -15,7 +15,7 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_field):
         user = self.model(email=email, **extra_field)
         user.set_password(password) #set_password encrypts the password
-        user.save(using=self._db)
+        user.save(using=self._db) #self._db enables multi-database support; very rare but good practice
         return user
 
 
@@ -28,4 +28,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
+    objects = UserManager()
+    
     USERNAME_FIELD = "email"  #overrides the default username field of AbstractBaseUser
